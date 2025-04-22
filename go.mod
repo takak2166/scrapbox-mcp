@@ -5,3 +5,5 @@ go 1.23.5
 toolchain go1.23.8
 
 require github.com/google/go-cmp v0.6.0
+
+require github.com/joho/godotenv v1.5.1 // indirect
