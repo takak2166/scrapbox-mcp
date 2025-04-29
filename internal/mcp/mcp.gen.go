@@ -48,10 +48,10 @@ var PromptList = []protocol.Prompt{}
 
 // JSON Schema type definitions generated from inputSchema
 var (
-	ToolGetPageInputSchema     = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","$ref":"#/$defs/GetPageInput","$defs":{"GetPageInput":{"properties":{"page_title":{"type":"string","description":"Page title to retrieve"}},"additionalProperties":false,"type":"object","required":["page_title"]}}}`)
+	ToolGetPageInputSchema     = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"page_title":{"type":"string","description":"Page title to retrieve"}},"additionalProperties":false,"type":"object","required":["page_title"]}`)
 	ToolListPagesInputSchema   = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{},"additionalProperties":false,"type":"object"}`)
-	ToolSearchPagesInputSchema = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","$ref":"#/$defs/SearchPagesInput","$defs":{"SearchPagesInput":{"properties":{"query":{"type":"string","description":"Search query"}},"additionalProperties":false,"type":"object","required":["query"]}}}`)
-	ToolCreatePageInputSchema  = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","$ref":"#/$defs/CreatePageInput","$defs":{"CreatePageInput":{"properties":{"page_title":{"type":"string","description":"Title of the new page"},"body_text":{"type":"string","description":"Optional body text for the new page"}},"additionalProperties":false,"type":"object","required":["page_title","body_text"]}}}`)
+	ToolSearchPagesInputSchema = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"query":{"type":"string","description":"Search query"}},"additionalProperties":false,"type":"object","required":["query"]}`)
+	ToolCreatePageInputSchema  = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"page_title":{"type":"string","description":"Title of the new page"},"body_text":{"type":"string","description":"Optional body text for the new page"}},"additionalProperties":false,"type":"object","required":["page_title","body_text"]}`)
 )
 
 // ToolList contains all available tools.

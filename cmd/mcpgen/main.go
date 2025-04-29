@@ -8,19 +8,6 @@ import (
 	"github.com/ktr0731/go-mcp/codegen"
 )
 
-type GetPageInput struct {
-	PageTitle string `json:"page_title" jsonschema:"description=Page title to retrieve,required"`
-}
-
-type SearchPagesInput struct {
-	Query string `json:"query" jsonschema:"description=Search query,required"`
-}
-
-type CreatePageInput struct {
-	PageTitle string  `json:"page_title" jsonschema:"description=Title of the new page,required"`
-	BodyText  *string `json:"body_text" jsonschema:"description=Optional body text for the new page"`
-}
-
 func main() {
 	outDir := "internal/mcp"
 	if err := os.MkdirAll(outDir, 0o755); err != nil {
@@ -45,7 +32,9 @@ func main() {
 			{
 				Name:        "get_page",
 				Description: "Get page content from Scrapbox",
-				InputSchema: GetPageInput{},
+				InputSchema: struct {
+					PageTitle string `json:"page_title" jsonschema:"description=Page title to retrieve,required"`
+				}{},
 			},
 			{
 				Name:        "list_pages",
@@ -55,12 +44,17 @@ func main() {
 			{
 				Name:        "search_pages",
 				Description: "Full-text search across all pages in the project (max 100 pages)",
-				InputSchema: SearchPagesInput{},
+				InputSchema: struct {
+					Query string `json:"query" jsonschema:"description=Search query,required"`
+				}{},
 			},
 			{
 				Name:        "create_page",
 				Description: "Create a new page",
-				InputSchema: CreatePageInput{},
+				InputSchema: struct {
+					PageTitle string  `json:"page_title" jsonschema:"description=Title of the new page,required"`
+					BodyText  *string `json:"body_text" jsonschema:"description=Optional body text for the new page"`
+				}{},
 			},
 		},
 	}
