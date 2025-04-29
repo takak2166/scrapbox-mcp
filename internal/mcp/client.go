@@ -24,7 +24,14 @@ type Client struct {
 // Page represents a Scrapbox page.
 type Page struct {
 	Title string `json:"title"`
-	Text  string `json:"text"`
+	Lines []Line `json:"lines"`
+}
+
+// Line represents a line of text in a Scrapbox page.
+type Line struct {
+	Text    string `json:"text"`
+	Created int64  `json:"created"`
+	Updated int64  `json:"updated"`
 }
 
 // PageList represents a list of Scrapbox pages.
