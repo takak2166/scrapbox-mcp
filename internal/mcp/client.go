@@ -111,7 +111,7 @@ func (c *Client) ListPages(ctx context.Context) (*PageList, error) {
 
 // SearchPages searches pages by query.
 func (c *Client) SearchPages(ctx context.Context, query string) (*PageList, error) {
-	endpoint := fmt.Sprintf("%s/pages/%s/search?q=%s", c.baseURL, c.projectName, url.QueryEscape(query))
+	endpoint := fmt.Sprintf("%s/pages/%s/search/query?q=%s", c.baseURL, c.projectName, url.QueryEscape(query))
 	log.Printf("GET %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
