@@ -57,24 +57,24 @@ func (c *Client) GetPage(ctx context.Context, title string) (*Page, error) {
 	log.Printf("GET %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to create request", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
 	}
 	req.Header.Set("Cookie", fmt.Sprintf("connect.sid=%s", c.cookie))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to send request", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to send request", Err: err}
 	}
 	defer resp.Body.Close()
 
 	log.Printf("Response status: %d", resp.StatusCode)
 	if resp.StatusCode != http.StatusOK {
-		return nil, errors.NewScrapboxError(resp.StatusCode, "unexpected status code", nil)
+		return nil, &errors.ScrapboxError{Code: resp.StatusCode, Message: "unexpected status code", Err: nil}
 	}
 
 	var page Page
 	if err := json.NewDecoder(resp.Body).Decode(&page); err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to decode response", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to decode response", Err: err}
 	}
 
 	return &page, nil
@@ -86,24 +86,24 @@ func (c *Client) ListPages(ctx context.Context) (*PageList, error) {
 	log.Printf("GET %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to create request", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
 	}
 	req.Header.Set("Cookie", fmt.Sprintf("connect.sid=%s", c.cookie))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to send request", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to send request", Err: err}
 	}
 	defer resp.Body.Close()
 
 	log.Printf("Response status: %d", resp.StatusCode)
 	if resp.StatusCode != http.StatusOK {
-		return nil, errors.NewScrapboxError(resp.StatusCode, "unexpected status code", nil)
+		return nil, &errors.ScrapboxError{Code: resp.StatusCode, Message: "unexpected status code", Err: nil}
 	}
 
 	var pageList PageList
 	if err := json.NewDecoder(resp.Body).Decode(&pageList); err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to decode response", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to decode response", Err: err}
 	}
 
 	return &pageList, nil
@@ -115,24 +115,24 @@ func (c *Client) SearchPages(ctx context.Context, query string) (*PageList, erro
 	log.Printf("GET %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to create request", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
 	}
 	req.Header.Set("Cookie", fmt.Sprintf("connect.sid=%s", c.cookie))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to send request", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to send request", Err: err}
 	}
 	defer resp.Body.Close()
 
 	log.Printf("Response status: %d", resp.StatusCode)
 	if resp.StatusCode != http.StatusOK {
-		return nil, errors.NewScrapboxError(resp.StatusCode, "unexpected status code", nil)
+		return nil, &errors.ScrapboxError{Code: resp.StatusCode, Message: "unexpected status code", Err: nil}
 	}
 
 	var pageList PageList
 	if err := json.NewDecoder(resp.Body).Decode(&pageList); err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to decode response", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to decode response", Err: err}
 	}
 
 	return &pageList, nil
@@ -148,30 +148,30 @@ func (c *Client) CreatePage(ctx context.Context, title, text string) (*Page, err
 	}
 	bodyJSON, err := json.Marshal(body)
 	if err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to marshal request body", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to marshal request body", Err: err}
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(bodyJSON))
 	if err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to create request", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
 	}
 	req.Header.Set("Cookie", fmt.Sprintf("connect.sid=%s", c.cookie))
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to send request", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to send request", Err: err}
 	}
 	defer resp.Body.Close()
 
 	log.Printf("Response status: %d", resp.StatusCode)
 	if resp.StatusCode != http.StatusCreated {
-		return nil, errors.NewScrapboxError(resp.StatusCode, "unexpected status code", nil)
+		return nil, &errors.ScrapboxError{Code: resp.StatusCode, Message: "unexpected status code", Err: nil}
 	}
 
 	var page Page
 	if err := json.NewDecoder(resp.Body).Decode(&page); err != nil {
-		return nil, errors.NewScrapboxError(errors.ErrServerError, "failed to decode response", err)
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to decode response", Err: err}
 	}
 
 	return &page, nil

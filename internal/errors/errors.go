@@ -17,14 +17,6 @@ func (e *ScrapboxError) Error() string {
 	return fmt.Sprintf("scrapbox error: %s (code: %d)", e.Message, e.Code)
 }
 
-func NewScrapboxError(code int, message string, err error) *ScrapboxError {
-	return &ScrapboxError{
-		Code:    code,
-		Message: message,
-		Err:     err,
-	}
-}
-
 const (
 	ErrInvalidCredentials = 401
 	ErrNotFound           = 404

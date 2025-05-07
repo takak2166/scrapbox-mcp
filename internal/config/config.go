@@ -24,12 +24,12 @@ func LoadConfig() (*Config, error) {
 
 	sid := os.Getenv("SCRAPBOX_SID")
 	if sid == "" {
-		return nil, errors.NewScrapboxError(errors.ErrInvalidCredentials, "SCRAPBOX_SID is not set", nil)
+		return nil, &errors.ScrapboxError{Code: errors.ErrInvalidCredentials, Message: "SCRAPBOX_SID is not set", Err: nil}
 	}
 
 	project := os.Getenv("SCRAPBOX_PROJECT")
 	if project == "" {
-		return nil, errors.NewScrapboxError(errors.ErrInvalidCredentials, "SCRAPBOX_PROJECT is not set", nil)
+		return nil, &errors.ScrapboxError{Code: errors.ErrInvalidCredentials, Message: "SCRAPBOX_PROJECT is not set", Err: nil}
 	}
 
 	// Default port is 8080
@@ -38,7 +38,7 @@ func LoadConfig() (*Config, error) {
 		var err error
 		port, err = strconv.Atoi(portStr)
 		if err != nil {
-			return nil, errors.NewScrapboxError(errors.ErrInvalidCredentials, "PORT must be a valid number", err)
+			return nil, &errors.ScrapboxError{Code: errors.ErrInvalidCredentials, Message: "PORT must be a valid number", Err: err}
 		}
 	}
 

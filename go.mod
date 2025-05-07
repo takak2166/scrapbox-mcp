@@ -11,7 +11,7 @@ require (
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/invopop/jsonschema v0.13.0 // indirect
 	github.com/joho/godotenv v1.5.1
-	github.com/ktr0731/go-mcp v0.1.0
+	github.com/ktr0731/go-mcp v0.1.1
 	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect

@@ -35,7 +35,7 @@ func TestScrapboxError(t *testing.T) {
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			for _, tc := range tt {
-				err := NewScrapboxError(tc.code, tc.message, tc.err)
+				err := &ScrapboxError{Code: tc.code, Message: tc.message, Err: tc.err}
 				if diff := cmp.Diff(tc.expected, err.Error()); diff != "" {
 					t.Errorf("Error() mismatch (-want +got):\n%s", diff)
 				}
