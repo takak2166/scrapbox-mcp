@@ -20,7 +20,7 @@ type ServerToolHandler interface {
 	HandleToolGetPage(ctx context.Context, req *ToolGetPageRequest) (*mcp.CallToolResult, error)
 	HandleToolListPages(ctx context.Context, req *ToolListPagesRequest) (*mcp.CallToolResult, error)
 	HandleToolSearchPages(ctx context.Context, req *ToolSearchPagesRequest) (*mcp.CallToolResult, error)
-	HandleToolCreatePage(ctx context.Context, req *ToolCreatePageRequest) (*mcp.CallToolResult, error)
+	HandleToolCreatePageUrl(ctx context.Context, req *ToolCreatePageUrlRequest) (*mcp.CallToolResult, error)
 }
 
 // ToolGetPageRequest contains input parameters for the get_page tool.
@@ -37,8 +37,8 @@ type ToolSearchPagesRequest struct {
 	Query string `json:"query"`
 }
 
-// ToolCreatePageRequest contains input parameters for the create_page tool.
-type ToolCreatePageRequest struct {
+// ToolCreatePageUrlRequest contains input parameters for the create_page_url tool.
+type ToolCreatePageUrlRequest struct {
 	PageTitle string  `json:"page_title"`
 	BodyText  *string `json:"body_text"`
 }
@@ -48,10 +48,10 @@ var PromptList = []protocol.Prompt{}
 
 // JSON Schema type definitions generated from inputSchema
 var (
-	ToolGetPageInputSchema     = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"page_title":{"type":"string","description":"Page title to retrieve"}},"additionalProperties":false,"type":"object","required":["page_title"]}`)
-	ToolListPagesInputSchema   = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{},"additionalProperties":false,"type":"object"}`)
-	ToolSearchPagesInputSchema = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"query":{"type":"string","description":"Search query"}},"additionalProperties":false,"type":"object","required":["query"]}`)
-	ToolCreatePageInputSchema  = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"page_title":{"type":"string","description":"Title of the new page"},"body_text":{"type":"string","description":"Optional body text for the new page"}},"additionalProperties":false,"type":"object","required":["page_title","body_text"]}`)
+	ToolGetPageInputSchema       = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"page_title":{"type":"string","description":"Page title to retrieve"}},"additionalProperties":false,"type":"object","required":["page_title"]}`)
+	ToolListPagesInputSchema     = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{},"additionalProperties":false,"type":"object"}`)
+	ToolSearchPagesInputSchema   = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"query":{"type":"string","description":"Search query"}},"additionalProperties":false,"type":"object","required":["query"]}`)
+	ToolCreatePageUrlInputSchema = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"page_title":{"type":"string","description":"Title of the new page"},"body_text":{"type":"string","description":"Optional body text for the new page"}},"additionalProperties":false,"type":"object","required":["page_title","body_text"]}`)
 )
 
 // ToolList contains all available tools.
@@ -72,9 +72,9 @@ var ToolList = []protocol.Tool{
 		InputSchema: ToolSearchPagesInputSchema,
 	},
 	{
-		Name:        "create_page",
-		Description: "Create a new page",
-		InputSchema: ToolCreatePageInputSchema,
+		Name:        "create_page_url",
+		Description: "Generate a URL for creating a new page",
+		InputSchema: ToolCreatePageUrlInputSchema,
 	},
 }
 
@@ -130,8 +130,8 @@ func NewHandler(toolHandler ServerToolHandler) *mcp.Handler {
 					return nil, err
 				}
 				return toolHandler.HandleToolSearchPages(ctx, &in)
-			case "create_page":
-				var in ToolCreatePageRequest
+			case "create_page_url":
+				var in ToolCreatePageUrlRequest
 				if err := json.Unmarshal(req.Arguments, &in); err != nil {
 					return nil, err
 				}
@@ -139,7 +139,7 @@ func NewHandler(toolHandler ServerToolHandler) *mcp.Handler {
 				if err := protocol.ValidateByJSONSchema(string(inputSchema), in); err != nil {
 					return nil, err
 				}
-				return toolHandler.HandleToolCreatePage(ctx, &in)
+				return toolHandler.HandleToolCreatePageUrl(ctx, &in)
 			default:
 				return nil, fmt.Errorf("tool not found: %s", req.Name)
 			}

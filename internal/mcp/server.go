@@ -70,22 +70,22 @@ func (s *Server) HandleToolSearchPages(ctx context.Context, req *ToolSearchPages
 	}, nil
 }
 
-// HandleToolCreatePage handles create_page tool requests.
-func (s *Server) HandleToolCreatePage(ctx context.Context, req *ToolCreatePageRequest) (*mcp.CallToolResult, error) {
-	log.Printf("Handling create_page request for title: %s", req.PageTitle)
+// HandleToolCreatePageUrl handles create_page_url tool requests.
+func (s *Server) HandleToolCreatePageUrl(ctx context.Context, req *ToolCreatePageUrlRequest) (*mcp.CallToolResult, error) {
+	log.Printf("Handling create_page_url request for title: %s", req.PageTitle)
 	bodyText := ""
 	if req.BodyText != nil {
 		bodyText = *req.BodyText
 	}
-	page, err := s.client.CreatePage(ctx, req.PageTitle, bodyText)
+	pageURL, err := s.client.CreatePageURL(ctx, req.PageTitle, bodyText)
 	if err != nil {
-		log.Printf("Failed to create page: %v", err)
-		return nil, fmt.Errorf("failed to create page: %w", err)
+		log.Printf("Failed to generate page URL: %v", err)
+		return nil, fmt.Errorf("failed to generate page URL: %w", err)
 	}
-	log.Printf("Successfully created page: %s", page.Title)
+	log.Printf("Successfully generated page URL: %s", pageURL)
 	return &mcp.CallToolResult{
 		Content: []mcp.CallToolContent{
-			mcp.TextContent{Text: fmt.Sprintf("Created page: %v", page)},
+			mcp.TextContent{Text: fmt.Sprintf("Generated page URL: %s", pageURL)},
 		},
 	}, nil
 }

@@ -1,7 +1,6 @@
 package scrapbox
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -138,41 +137,12 @@ func (c *Client) SearchPages(ctx context.Context, query string) (*PageList, erro
 	return &pageList, nil
 }
 
-// CreatePage creates a new page.
-func (c *Client) CreatePage(ctx context.Context, title, text string) (*Page, error) {
-	endpoint := fmt.Sprintf("%s/pages/%s", c.baseURL, c.projectName)
-	log.Printf("POST %s", endpoint)
-	body := map[string]string{
-		"title": title,
-		"text":  text,
+// CreatePageURL generates a URL for creating a new page.
+func (c *Client) CreatePageURL(ctx context.Context, title, text string) (string, error) {
+	baseURL := "https://scrapbox.io"
+	pageURL := fmt.Sprintf("%s/%s/%s", baseURL, c.projectName, url.PathEscape(title))
+	if text != "" {
+		pageURL = fmt.Sprintf("%s?body=%s", pageURL, url.QueryEscape(text))
 	}
-	bodyJSON, err := json.Marshal(body)
-	if err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to marshal request body", Err: err}
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(bodyJSON))
-	if err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
-	}
-	req.Header.Set("Cookie", fmt.Sprintf("connect.sid=%s", c.cookie))
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to send request", Err: err}
-	}
-	defer resp.Body.Close()
-
-	log.Printf("Response status: %d", resp.StatusCode)
-	if resp.StatusCode != http.StatusCreated {
-		return nil, &errors.ScrapboxError{Code: resp.StatusCode, Message: "unexpected status code", Err: nil}
-	}
-
-	var page Page
-	if err := json.NewDecoder(resp.Body).Decode(&page); err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to decode response", Err: err}
-	}
-
-	return &page, nil
+	return pageURL, nil
 }

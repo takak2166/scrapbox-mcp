@@ -49,8 +49,8 @@ func main() {
 				}{},
 			},
 			{
-				Name:        "create_page",
-				Description: "Create a new page",
+				Name:        "create_page_url",
+				Description: "Generate a URL for creating a new page",
 				InputSchema: struct {
 					PageTitle string  `json:"page_title" jsonschema:"description=Title of the new page,required"`
 					BodyText  *string `json:"body_text" jsonschema:"description=Optional body text for the new page"`

@@ -205,71 +205,43 @@ func TestClient_SearchPages(t *testing.T) {
 	}
 }
 
-func TestClient_CreatePage(t *testing.T) {
+func TestClient_CreatePageURL(t *testing.T) {
 	tests := map[string]struct {
-		statusCode int
-		response   any
-		title      string
-		text       string
-		expectPage *Page
-		expectErr  error
+		title     string
+		text      string
+		expectURL string
 	}{
-		"ok: created": {
-			statusCode: http.StatusCreated,
-			response: Page{
-				Title: "NewPage",
-				Lines: []Line{{Text: "new line"}},
-			},
-			title: "NewPage",
-			text:  "new line",
-			expectPage: &Page{
-				Title: "NewPage",
-				Lines: []Line{{Text: "new line"}},
-			},
-			expectErr: nil,
+		"ok: with text": {
+			title:     "NewPage",
+			text:      "new line",
+			expectURL: "https://scrapbox.io/testproject/NewPage?body=new+line",
 		},
-		"ng: unexpected status": {
-			statusCode: http.StatusBadRequest,
-			response:   map[string]string{"error": "bad request"},
-			title:      "Bad",
-			text:       "bad",
-			expectPage: nil,
-			expectErr:  &errors.ScrapboxError{Code: http.StatusBadRequest, Message: "unexpected status code", Err: nil},
+		"ok: without text": {
+			title:     "NewPage",
+			text:      "",
+			expectURL: "https://scrapbox.io/testproject/NewPage",
+		},
+		"ok: with special characters": {
+			title:     "Test Page",
+			text:      "test & text",
+			expectURL: "https://scrapbox.io/testproject/Test%20Page?body=test+%26+text",
 		},
 	}
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.WriteHeader(tc.statusCode)
-				if tc.response != nil {
-					_ = json.NewEncoder(w).Encode(tc.response)
-				}
-			}))
-			t.Cleanup(ts.Close)
 			client := &Client{
-				httpClient:  ts.Client(),
-				baseURL:     ts.URL,
+				httpClient:  &http.Client{},
+				baseURL:     "https://scrapbox.io/api",
 				projectName: "testproject",
 				cookie:      "dummy",
 			}
-			page, err := client.CreatePage(context.Background(), tc.title, tc.text)
-			if diff := cmp.Diff(tc.expectPage, page); diff != "" {
-				t.Errorf("CreatePage() mismatch (-want +got):\n%s", diff)
-			}
-			if tc.expectErr == nil && err != nil {
-				t.Errorf("CreatePage() unexpected error: %v", err)
+			url, err := client.CreatePageURL(context.Background(), tc.title, tc.text)
+			if err != nil {
+				t.Errorf("CreatePageURL() unexpected error: %v", err)
 				return
 			}
-			if tc.expectErr != nil && err == nil {
-				t.Errorf("CreatePage() expected error but got nil")
-				return
-			}
-			if tc.expectErr != nil {
-				e1, ok1 := err.(*errors.ScrapboxError)
-				e2, ok2 := tc.expectErr.(*errors.ScrapboxError)
-				if !ok1 || !ok2 || !reflect.DeepEqual(e1.Code, e2.Code) || !reflect.DeepEqual(e1.Message, e2.Message) {
-					t.Errorf("CreatePage() error mismatch: got=%v, want=%v", err, tc.expectErr)
-				}
+			if diff := cmp.Diff(tc.expectURL, url); diff != "" {
+				t.Errorf("CreatePageURL() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
