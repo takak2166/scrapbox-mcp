@@ -38,6 +38,17 @@ type PageList struct {
 	Pages []Page `json:"pages"`
 }
 
+// SearchPage represents a page in search results.
+type SearchPage struct {
+	Title string   `json:"title"`
+	Lines []string `json:"lines"`
+}
+
+// SearchPageList represents a list of search results.
+type SearchPageList struct {
+	Pages []SearchPage `json:"pages"`
+}
+
 // NewClient creates a new Scrapbox API client.
 func NewClient(projectName, cookie string) *Client {
 	return &Client{
@@ -109,7 +120,7 @@ func (c *Client) ListPages(ctx context.Context) (*PageList, error) {
 }
 
 // SearchPages searches pages by query.
-func (c *Client) SearchPages(ctx context.Context, query string) (*PageList, error) {
+func (c *Client) SearchPages(ctx context.Context, query string) (*SearchPageList, error) {
 	endpoint := fmt.Sprintf("%s/pages/%s/search/query?q=%s", c.baseURL, c.projectName, url.QueryEscape(query))
 	log.Printf("GET %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
@@ -129,7 +140,7 @@ func (c *Client) SearchPages(ctx context.Context, query string) (*PageList, erro
 		return nil, &errors.ScrapboxError{Code: resp.StatusCode, Message: "unexpected status code", Err: nil}
 	}
 
-	var pageList PageList
+	var pageList SearchPageList
 	if err := json.NewDecoder(resp.Body).Decode(&pageList); err != nil {
 		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to decode response", Err: err}
 	}

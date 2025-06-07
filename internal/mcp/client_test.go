@@ -147,16 +147,16 @@ func TestClient_SearchPages(t *testing.T) {
 		statusCode int
 		response   any
 		query      string
-		expectList *PageList
+		expectList *SearchPageList
 		expectErr  error
 	}{
 		"ok: success": {
 			statusCode: http.StatusOK,
-			response: PageList{
-				Pages: []Page{{Title: "Q1"}},
+			response: SearchPageList{
+				Pages: []SearchPage{{Title: "Q1", Lines: []string{"line1"}}},
 			},
 			query:      "Q1",
-			expectList: &PageList{Pages: []Page{{Title: "Q1"}}},
+			expectList: &SearchPageList{Pages: []SearchPage{{Title: "Q1", Lines: []string{"line1"}}}},
 			expectErr:  nil,
 		},
 		"ng: unexpected status": {
