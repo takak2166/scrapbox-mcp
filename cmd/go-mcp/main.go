@@ -6,7 +6,8 @@ import (
 
 	mcp "github.com/ktr0731/go-mcp"
 	"github.com/takak2166/scrapbox-mcp/internal/config"
-	scrapbox "github.com/takak2166/scrapbox-mcp/internal/mcp"
+	mcpServer "github.com/takak2166/scrapbox-mcp/internal/go-mcp"
+	scrapbox "github.com/takak2166/scrapbox-mcp/pkg/scrapbox"
 	"golang.org/x/exp/jsonrpc2"
 )
 
@@ -17,8 +18,8 @@ func main() {
 	}
 
 	client := scrapbox.NewClient(cfg.ProjectName, cfg.ScrapboxSID)
-	server := scrapbox.NewServer(cfg.ProjectName, client)
-	handler := scrapbox.NewHandler(server)
+	server := mcpServer.NewServer(cfg.ProjectName, client)
+	handler := mcpServer.NewHandler(server)
 
 	ctx, listener, binder := mcp.NewStdioTransport(context.Background(), handler, nil)
 	srv, err := jsonrpc2.Serve(ctx, listener, binder)

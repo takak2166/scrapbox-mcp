@@ -6,16 +6,17 @@ import (
 	"log"
 
 	mcp "github.com/ktr0731/go-mcp"
+	"github.com/takak2166/scrapbox-mcp/pkg/scrapbox"
 )
 
 // Server implements ServerToolHandler interface.
 type Server struct {
 	projectName string
-	client      *Client
+	client      *scrapbox.Client
 }
 
 // NewServer creates a new Server instance.
-func NewServer(projectName string, client *Client) *Server {
+func NewServer(projectName string, client *scrapbox.Client) *Server {
 	return &Server{
 		projectName: projectName,
 		client:      client,
