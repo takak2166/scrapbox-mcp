@@ -34,4 +34,4 @@ go.work
 Thumbs.db
 
 # Executable file
-scrapbox-mcp
+bin/
