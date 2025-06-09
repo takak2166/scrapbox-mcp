@@ -51,14 +51,14 @@ var (
 	ToolGetPageInputSchema       = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"page_title":{"type":"string","description":"Page title to retrieve"}},"additionalProperties":false,"type":"object","required":["page_title"]}`)
 	ToolListPagesInputSchema     = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{},"additionalProperties":false,"type":"object"}`)
 	ToolSearchPagesInputSchema   = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"query":{"type":"string","description":"Search query"}},"additionalProperties":false,"type":"object","required":["query"]}`)
-	ToolCreatePageUrlInputSchema = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"page_title":{"type":"string","description":"Title of the new page"},"body_text":{"type":"string","description":"Optional body text for the new page"}},"additionalProperties":false,"type":"object","required":["page_title","body_text"]}`)
+	ToolCreatePageUrlInputSchema = json.RawMessage(`{"$schema":"https://json-schema.org/draft/2020-12/schema","properties":{"page_title":{"type":"string","description":"Page title"},"body_text":{"type":"string","description":"Body text for the new page"}},"additionalProperties":false,"type":"object","required":["page_title","body_text"]}`)
 )
 
 // ToolList contains all available tools.
 var ToolList = []protocol.Tool{
 	{
 		Name:        "get_page",
-		Description: "Get page content from Scrapbox",
+		Description: "Get a Scrapbox page by title",
 		InputSchema: ToolGetPageInputSchema,
 	},
 	{

@@ -9,13 +9,13 @@ import (
 )
 
 func main() {
-	outDir := "internal/mcp"
+	outDir := "internal/go-mcp"
 	if err := os.MkdirAll(outDir, 0o755); err != nil {
-		log.Fatalf("failed to create output directory: %v", err)
+		log.Fatalf("Failed to create output directory: %v", err)
 	}
 	f, err := os.Create(filepath.Join(outDir, "mcp.gen.go"))
 	if err != nil {
-		log.Fatalf("failed to create file: %v", err)
+		log.Fatalf("Failed to create file: %v", err)
 	}
 	defer f.Close()
 
@@ -31,7 +31,7 @@ func main() {
 		Tools: []codegen.Tool{
 			{
 				Name:        "get_page",
-				Description: "Get page content from Scrapbox",
+				Description: "Get a Scrapbox page by title",
 				InputSchema: struct {
 					PageTitle string `json:"page_title" jsonschema:"description=Page title to retrieve,required"`
 				}{},
@@ -52,14 +52,14 @@ func main() {
 				Name:        "create_page_url",
 				Description: "Generate a URL for creating a new page",
 				InputSchema: struct {
-					PageTitle string  `json:"page_title" jsonschema:"description=Title of the new page,required"`
-					BodyText  *string `json:"body_text" jsonschema:"description=Optional body text for the new page"`
+					PageTitle string  `json:"page_title" jsonschema:"description=Page title,required"`
+					BodyText  *string `json:"body_text" jsonschema:"description=Body text for the new page"`
 				}{},
 			},
 		},
 	}
 
 	if err := codegen.Generate(f, def, "scrapbox"); err != nil {
-		log.Fatalf("failed to generate code: %v", err)
+		log.Fatalf("Failed to generate code: %v", err)
 	}
 }

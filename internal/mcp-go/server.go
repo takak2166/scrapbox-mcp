@@ -7,7 +7,6 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
-	"github.com/takak2166/scrapbox-mcp/internal/config"
 	"github.com/takak2166/scrapbox-mcp/pkg/scrapbox"
 )
 
@@ -18,8 +17,7 @@ type Server struct {
 }
 
 // NewServer creates a new MCP server instance
-func NewServer(cfg *config.Config) *server.MCPServer {
-	client := scrapbox.NewClient(cfg.ProjectName, cfg.ScrapboxSID)
+func NewServer(client *scrapbox.Client) *server.MCPServer {
 	mcpSrv := server.NewMCPServer(
 		"Scrapbox MCP Server",
 		"1.0.0",
@@ -47,7 +45,7 @@ func (s *Server) registerTools() {
 		}
 		page, err := s.client.GetPage(ctx, title)
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("failed to get page: %v", err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("Failed to get page: %v", err)), nil
 		}
 		b, _ := json.Marshal(page)
 		return mcp.NewToolResultText(string(b)), nil
@@ -55,12 +53,12 @@ func (s *Server) registerTools() {
 
 	// list_pages
 	listPagesTool := mcp.NewTool("list_pages",
-		mcp.WithDescription("List all Scrapbox pages"),
+		mcp.WithDescription("Get a list of pages in the project (max 1000 pages)"),
 	)
 	s.mcpServer.AddTool(listPagesTool, func(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		pages, err := s.client.ListPages(ctx)
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("failed to list pages: %v", err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("Failed to list pages: %v", err)), nil
 		}
 		b, _ := json.Marshal(pages)
 		return mcp.NewToolResultText(string(b)), nil
@@ -68,7 +66,7 @@ func (s *Server) registerTools() {
 
 	// search_pages
 	searchPagesTool := mcp.NewTool("search_pages",
-		mcp.WithDescription("Search Scrapbox pages"),
+		mcp.WithDescription("Full-text search across all pages in the project (max 100 pages)"),
 		mcp.WithString("query", mcp.Required(), mcp.Description("Search query")),
 	)
 	s.mcpServer.AddTool(searchPagesTool, func(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {

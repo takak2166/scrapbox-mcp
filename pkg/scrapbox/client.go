@@ -64,7 +64,7 @@ func NewClient(projectName, cookie string) *Client {
 // GetPage retrieves a page by title.
 func (c *Client) GetPage(ctx context.Context, title string) (*Page, error) {
 	endpoint := fmt.Sprintf("%s/pages/%s/%s", c.baseURL, c.projectName, url.PathEscape(title))
-	log.Printf("GET %s", endpoint)
+	log.Printf("GET request to %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
@@ -77,7 +77,7 @@ func (c *Client) GetPage(ctx context.Context, title string) (*Page, error) {
 	}
 	defer resp.Body.Close()
 
-	log.Printf("Response status: %d", resp.StatusCode)
+	log.Printf("Response status code: %d", resp.StatusCode)
 	if resp.StatusCode != http.StatusOK {
 		return nil, &errors.ScrapboxError{Code: resp.StatusCode, Message: "unexpected status code", Err: nil}
 	}
@@ -93,7 +93,7 @@ func (c *Client) GetPage(ctx context.Context, title string) (*Page, error) {
 // ListPages retrieves a list of pages.
 func (c *Client) ListPages(ctx context.Context) (*PageList, error) {
 	endpoint := fmt.Sprintf("%s/pages/%s", c.baseURL, c.projectName)
-	log.Printf("GET %s", endpoint)
+	log.Printf("GET request to %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
@@ -106,7 +106,7 @@ func (c *Client) ListPages(ctx context.Context) (*PageList, error) {
 	}
 	defer resp.Body.Close()
 
-	log.Printf("Response status: %d", resp.StatusCode)
+	log.Printf("Response status code: %d", resp.StatusCode)
 	if resp.StatusCode != http.StatusOK {
 		return nil, &errors.ScrapboxError{Code: resp.StatusCode, Message: "unexpected status code", Err: nil}
 	}
@@ -122,7 +122,7 @@ func (c *Client) ListPages(ctx context.Context) (*PageList, error) {
 // SearchPages searches pages by query.
 func (c *Client) SearchPages(ctx context.Context, query string) (*SearchPageList, error) {
 	endpoint := fmt.Sprintf("%s/pages/%s/search/query?q=%s", c.baseURL, c.projectName, url.QueryEscape(query))
-	log.Printf("GET %s", endpoint)
+	log.Printf("GET request to %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
@@ -135,7 +135,7 @@ func (c *Client) SearchPages(ctx context.Context, query string) (*SearchPageList
 	}
 	defer resp.Body.Close()
 
-	log.Printf("Response status: %d", resp.StatusCode)
+	log.Printf("Response status code: %d", resp.StatusCode)
 	if resp.StatusCode != http.StatusOK {
 		return nil, &errors.ScrapboxError{Code: resp.StatusCode, Message: "unexpected status code", Err: nil}
 	}

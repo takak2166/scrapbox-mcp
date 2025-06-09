@@ -19,7 +19,7 @@ func LoadConfig() (*Config, error) {
 	// Load .env file if exists
 	err := godotenv.Load()
 	if err != nil {
-		log.Printf("failed to load .env file: %v", err)
+		log.Printf("Failed to load .env file: %v", err)
 	}
 
 	sid := os.Getenv("SCRAPBOX_SID")

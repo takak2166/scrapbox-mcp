@@ -2,91 +2,89 @@ package scrapbox
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"log"
 
 	mcp "github.com/ktr0731/go-mcp"
 	"github.com/takak2166/scrapbox-mcp/pkg/scrapbox"
 )
 
-// Server implements ServerToolHandler interface.
-type Server struct {
-	projectName string
-	client      *scrapbox.Client
+// ToolHandler implements ServerToolHandler interface.
+type ToolHandler struct {
+	client *scrapbox.Client
 }
 
-// NewServer creates a new Server instance.
-func NewServer(projectName string, client *scrapbox.Client) *Server {
-	return &Server{
-		projectName: projectName,
-		client:      client,
+// NewToolHandler creates a new ToolHandler instance.
+func NewToolHandler(client *scrapbox.Client) *ToolHandler {
+	return &ToolHandler{
+		client: client,
 	}
 }
 
 // HandleToolGetPage handles get_page tool requests.
-func (s *Server) HandleToolGetPage(ctx context.Context, req *ToolGetPageRequest) (*mcp.CallToolResult, error) {
-	log.Printf("Handling get_page request for title: %s", req.PageTitle)
-	page, err := s.client.GetPage(ctx, req.PageTitle)
+func (h *ToolHandler) HandleToolGetPage(ctx context.Context, req *ToolGetPageRequest) (*mcp.CallToolResult, error) {
+	page, err := h.client.GetPage(ctx, req.PageTitle)
 	if err != nil {
-		log.Printf("Failed to get page: %v", err)
 		return nil, fmt.Errorf("failed to get page: %w", err)
 	}
-	log.Printf("Successfully retrieved page: %s, Lines: %v", page.Title, page.Lines)
+	b, err := json.Marshal(page)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal page: %w", err)
+	}
 	return &mcp.CallToolResult{
 		Content: []mcp.CallToolContent{
-			mcp.TextContent{Text: fmt.Sprintf("Title: %s\nLines: %v", page.Title, page.Lines)},
+			mcp.TextContent{Text: string(b)},
 		},
 	}, nil
 }
 
 // HandleToolListPages handles list_pages tool requests.
-func (s *Server) HandleToolListPages(ctx context.Context, req *ToolListPagesRequest) (*mcp.CallToolResult, error) {
-	log.Printf("Handling list_pages request")
-	pages, err := s.client.ListPages(ctx)
+func (h *ToolHandler) HandleToolListPages(ctx context.Context, req *ToolListPagesRequest) (*mcp.CallToolResult, error) {
+	pages, err := h.client.ListPages(ctx)
 	if err != nil {
-		log.Printf("Failed to list pages: %v", err)
 		return nil, fmt.Errorf("failed to list pages: %w", err)
 	}
-	log.Printf("Successfully retrieved %d pages", len(pages.Pages))
+	b, err := json.Marshal(pages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal pages: %w", err)
+	}
 	return &mcp.CallToolResult{
 		Content: []mcp.CallToolContent{
-			mcp.TextContent{Text: fmt.Sprintf("Pages: %v", pages)},
+			mcp.TextContent{Text: string(b)},
 		},
 	}, nil
 }
 
 // HandleToolSearchPages handles search_pages tool requests.
-func (s *Server) HandleToolSearchPages(ctx context.Context, req *ToolSearchPagesRequest) (*mcp.CallToolResult, error) {
-	log.Printf("Handling search_pages request with query: %s", req.Query)
-	pages, err := s.client.SearchPages(ctx, req.Query)
+func (h *ToolHandler) HandleToolSearchPages(ctx context.Context, req *ToolSearchPagesRequest) (*mcp.CallToolResult, error) {
+	pages, err := h.client.SearchPages(ctx, req.Query)
 	if err != nil {
-		log.Printf("Failed to search pages: %v", err)
 		return nil, fmt.Errorf("failed to search pages: %w", err)
 	}
-	log.Printf("Successfully found %d pages matching query", len(pages.Pages))
+	b, err := json.Marshal(pages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal pages: %w", err)
+	}
 	return &mcp.CallToolResult{
 		Content: []mcp.CallToolContent{
-			mcp.TextContent{Text: fmt.Sprintf("Search results: %v", pages)},
+			mcp.TextContent{Text: string(b)},
 		},
 	}, nil
 }
 
 // HandleToolCreatePageUrl handles create_page_url tool requests.
-func (s *Server) HandleToolCreatePageUrl(ctx context.Context, req *ToolCreatePageUrlRequest) (*mcp.CallToolResult, error) {
-	log.Printf("Handling create_page_url request for title: %s", req.PageTitle)
+func (h *ToolHandler) HandleToolCreatePageUrl(ctx context.Context, req *ToolCreatePageUrlRequest) (*mcp.CallToolResult, error) {
 	bodyText := ""
 	if req.BodyText != nil {
 		bodyText = *req.BodyText
 	}
-	pageURL, err := s.client.CreatePageURL(ctx, req.PageTitle, bodyText)
+	pageURL, err := h.client.CreatePageURL(ctx, req.PageTitle, bodyText)
 	if err != nil {
-		log.Printf("Failed to generate page URL: %v", err)
 		return nil, fmt.Errorf("failed to generate page URL: %w", err)
 	}
-	log.Printf("Successfully generated page URL: %s", pageURL)
 	return &mcp.CallToolResult{
 		Content: []mcp.CallToolContent{
-			mcp.TextContent{Text: fmt.Sprintf("Generated page URL: %s", pageURL)},
+			mcp.TextContent{Text: pageURL},
 		},
 	}, nil
 }

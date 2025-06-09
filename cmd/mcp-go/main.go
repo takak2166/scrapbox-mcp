@@ -7,7 +7,8 @@ import (
 
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/takak2166/scrapbox-mcp/internal/config"
-	mcpgo "github.com/takak2166/scrapbox-mcp/internal/mcp-go"
+	mcpServer "github.com/takak2166/scrapbox-mcp/internal/mcp-go"
+	scrapbox "github.com/takak2166/scrapbox-mcp/pkg/scrapbox"
 )
 
 func main() {
@@ -17,8 +18,12 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	// Initialize and start the MCP server with stdio transport
-	mcpServer := mcpgo.NewServer(cfg)
+	client := scrapbox.NewClient(cfg.ProjectName, cfg.ScrapboxSID)
+
+	// Create MCP server
+	mcpServer := mcpServer.NewServer(client)
+
+	// Start the MCP server with stdio transport
 	if err := server.ServeStdio(mcpServer); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
