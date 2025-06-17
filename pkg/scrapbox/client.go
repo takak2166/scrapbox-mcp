@@ -67,13 +67,13 @@ func (c *Client) GetPage(ctx context.Context, title string) (*Page, error) {
 	log.Printf("GET request to %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "Failed to create request", Err: err}
 	}
 	req.Header.Set("Cookie", fmt.Sprintf("connect.sid=%s", c.cookie))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to send request", Err: err}
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "Failed to send request", Err: err}
 	}
 	defer resp.Body.Close()
 
@@ -84,7 +84,7 @@ func (c *Client) GetPage(ctx context.Context, title string) (*Page, error) {
 
 	var page Page
 	if err := json.NewDecoder(resp.Body).Decode(&page); err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to decode response", Err: err}
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "Failed to decode response", Err: err}
 	}
 
 	return &page, nil
@@ -96,13 +96,13 @@ func (c *Client) ListPages(ctx context.Context) (*PageList, error) {
 	log.Printf("GET request to %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "Failed to create request", Err: err}
 	}
 	req.Header.Set("Cookie", fmt.Sprintf("connect.sid=%s", c.cookie))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to send request", Err: err}
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "Failed to send request", Err: err}
 	}
 	defer resp.Body.Close()
 
@@ -113,7 +113,7 @@ func (c *Client) ListPages(ctx context.Context) (*PageList, error) {
 
 	var pageList PageList
 	if err := json.NewDecoder(resp.Body).Decode(&pageList); err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to decode response", Err: err}
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "Failed to decode response", Err: err}
 	}
 
 	return &pageList, nil
@@ -125,13 +125,13 @@ func (c *Client) SearchPages(ctx context.Context, query string) (*SearchPageList
 	log.Printf("GET request to %s", endpoint)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to create request", Err: err}
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "Failed to create request", Err: err}
 	}
 	req.Header.Set("Cookie", fmt.Sprintf("connect.sid=%s", c.cookie))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to send request", Err: err}
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "Failed to send request", Err: err}
 	}
 	defer resp.Body.Close()
 
@@ -142,7 +142,7 @@ func (c *Client) SearchPages(ctx context.Context, query string) (*SearchPageList
 
 	var pageList SearchPageList
 	if err := json.NewDecoder(resp.Body).Decode(&pageList); err != nil {
-		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "failed to decode response", Err: err}
+		return nil, &errors.ScrapboxError{Code: errors.ErrServerError, Message: "Failed to decode response", Err: err}
 	}
 
 	return &pageList, nil

@@ -47,7 +47,10 @@ func (s *Server) registerTools() {
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("Failed to get page: %v", err)), nil
 		}
-		b, _ := json.Marshal(page)
+		b, err := json.Marshal(page)
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("Failed to marshal page: %v", err)), nil
+		}
 		return mcp.NewToolResultText(string(b)), nil
 	})
 
@@ -60,7 +63,10 @@ func (s *Server) registerTools() {
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("Failed to list pages: %v", err)), nil
 		}
-		b, _ := json.Marshal(pages)
+		b, err := json.Marshal(pages)
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("Failed to marshal pages: %v", err)), nil
+		}
 		return mcp.NewToolResultText(string(b)), nil
 	})
 

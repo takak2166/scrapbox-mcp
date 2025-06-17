@@ -25,11 +25,11 @@ func NewToolHandler(client *scrapbox.Client) *ToolHandler {
 func (h *ToolHandler) HandleToolGetPage(ctx context.Context, req *ToolGetPageRequest) (*mcp.CallToolResult, error) {
 	page, err := h.client.GetPage(ctx, req.PageTitle)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get page: %w", err)
+		return nil, fmt.Errorf("Failed to get page: %w", err)
 	}
 	b, err := json.Marshal(page)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal page: %w", err)
+		return nil, fmt.Errorf("Failed to marshal page: %w", err)
 	}
 	return &mcp.CallToolResult{
 		Content: []mcp.CallToolContent{
@@ -42,11 +42,11 @@ func (h *ToolHandler) HandleToolGetPage(ctx context.Context, req *ToolGetPageReq
 func (h *ToolHandler) HandleToolListPages(ctx context.Context, req *ToolListPagesRequest) (*mcp.CallToolResult, error) {
 	pages, err := h.client.ListPages(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to list pages: %w", err)
+		return nil, fmt.Errorf("Failed to list pages: %w", err)
 	}
 	b, err := json.Marshal(pages)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal pages: %w", err)
+		return nil, fmt.Errorf("Failed to marshal pages: %w", err)
 	}
 	return &mcp.CallToolResult{
 		Content: []mcp.CallToolContent{
@@ -59,11 +59,11 @@ func (h *ToolHandler) HandleToolListPages(ctx context.Context, req *ToolListPage
 func (h *ToolHandler) HandleToolSearchPages(ctx context.Context, req *ToolSearchPagesRequest) (*mcp.CallToolResult, error) {
 	pages, err := h.client.SearchPages(ctx, req.Query)
 	if err != nil {
-		return nil, fmt.Errorf("failed to search pages: %w", err)
+		return nil, fmt.Errorf("Failed to search pages: %w", err)
 	}
 	b, err := json.Marshal(pages)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal pages: %w", err)
+		return nil, fmt.Errorf("Failed to marshal pages: %w", err)
 	}
 	return &mcp.CallToolResult{
 		Content: []mcp.CallToolContent{
@@ -80,7 +80,7 @@ func (h *ToolHandler) HandleToolCreatePageUrl(ctx context.Context, req *ToolCrea
 	}
 	pageURL, err := h.client.CreatePageURL(ctx, req.PageTitle, bodyText)
 	if err != nil {
-		return nil, fmt.Errorf("failed to generate page URL: %w", err)
+		return nil, fmt.Errorf("Failed to generate page URL: %w", err)
 	}
 	return &mcp.CallToolResult{
 		Content: []mcp.CallToolContent{
