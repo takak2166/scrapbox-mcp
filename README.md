@@ -6,10 +6,11 @@
 
 ### Overview
 
-Scrapbox MCP is a Message Control Protocol (MCP) server implementation for Scrapbox. This project provides two different implementations for comparison:
+Scrapbox MCP is a Message Control Protocol (MCP) server implementation for Scrapbox. This project provides three different implementations for comparison:
 
 1. Implementation using `mark3labs/mcp-go` framework
 2. Implementation using `ktr0731/go-mcp`
+3. Implementation using `metoro-io/mcp-golang`
 
 Both implementations provide a standardized interface for interacting with Scrapbox through various tools and commands.
 
@@ -49,6 +50,9 @@ go build -o bin/scrapbox-mcp cmd/mcp-go/main.go
 
 # For ktr0731/go-mcp implementation
 go build -o bin/scrapbox-mcp-go cmd/go-mcp/main.go
+
+# For metoro-io/mcp-golang implementation
+go build -o bin/scrapbox-mcp-golang cmd/mcp-golang/main.go
 ```
 
 ### Configuration
@@ -70,18 +74,22 @@ Run the server:
 
 # For ktr0731/go-mcp implementation
 ./bin/scrapbox-mcp-go
+
+# For metoro-io/mcp-golang implementation
+./bin/scrapbox-mcp-golang
 ```
 
 ### Project Structure
 
 ```
 .
-├── cmd/            # Command-line applications
-│   ├── mcp-go/    # mark3labs/mcp-go implementation
-│   └── go-mcp/    # ktr0731/go-mcp implementation
-├── internal/       # Private application code
-├── pkg/           # Public library code
-└── bin/           # Compiled binaries
+├── cmd/              # Command-line applications
+│   ├── mcp-go/      # mark3labs/mcp-go implementation
+│   ├── go-mcp/      # ktr0731/go-mcp implementation
+│   └── mcp-golang/  # metoro-io/mcp-golang implementation
+├── internal/         # Private application code
+├── pkg/             # Public library code
+└── bin/             # Compiled binaries
 ```
 
 
@@ -89,10 +97,11 @@ Run the server:
 
 ### 概要
 
-Scrapbox MCPは、Scrapbox用のMessage Control Protocol（MCP）サーバー実装です。このプロジェクトは比較のために2つの異なる実装を提供しています：
+Scrapbox MCPは、Scrapbox用のMessage Control Protocol（MCP）サーバー実装です。このプロジェクトは比較のために3つの異なる実装を提供しています：
 
 1. `mark3labs/mcp-go`フレームワークを使用した実装
 2. `ktr0731/go-mcp`を使用した実装
+3. `metoro-io/mcp-golang`を使用した実装
 
 両方の実装は、様々なツールやコマンドを通じてScrapboxと対話するための標準化されたインターフェースを提供します。
 
@@ -132,6 +141,9 @@ go build -o bin/scrapbox-mcp cmd/mcp-go/main.go
 
 # ktr0731/go-mcp実装用
 go build -o bin/scrapbox-mcp-go cmd/go-mcp/main.go
+
+# metoro-io/mcp-golang実装用
+go build -o bin/scrapbox-mcp-golang cmd/mcp-golang/main.go
 ```
 
 ### 設定
@@ -153,16 +165,20 @@ SCRAPBOX_SID=SID
 
 # ktr0731/go-mcp実装用
 ./bin/scrapbox-mcp-go
+
+# metoro-io/mcp-golang実装用
+./bin/scrapbox-mcp-golang
 ```
 
 ### プロジェクト構造
 
 ```
 .
-├── cmd/            # コマンドラインアプリケーション
-│   ├── mcp-go/    # mark3labs/mcp-go実装
-│   └── go-mcp/    # ktr0731/go-mcp実装
-├── internal/       # プライベートなアプリケーションコード
-├── pkg/           # パブリックなライブラリコード
-└── bin/           # コンパイル済みバイナリ
+├── cmd/              # コマンドラインアプリケーション
+│   ├── mcp-go/      # mark3labs/mcp-go実装
+│   ├── go-mcp/      # ktr0731/go-mcp実装
+│   └── mcp-golang/  # metoro-io/mcp-golang実装
+├── internal/         # プライベートなアプリケーションコード
+├── pkg/             # パブリックなライブラリコード
+└── bin/             # コンパイル済みバイナリ
 ```
