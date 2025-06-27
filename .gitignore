@@ -35,6 +35,3 @@ Thumbs.db
 
 # Executable file
 bin/
-
-# Imported dependencies
-internal/imported/
