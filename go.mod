@@ -6,7 +6,7 @@ toolchain go1.23.8
 
 require (
 	github.com/google/go-cmp v0.7.0
-	github.com/modelcontextprotocol/go-sdk v0.0.0-20250626133721-0e2abbb10782
+	github.com/modelcontextprotocol/go-sdk v0.0.0-20250627194314-8a3f272dbbcf
 )
 
 require (

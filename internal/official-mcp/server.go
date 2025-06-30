@@ -34,8 +34,8 @@ type CreatePageURLParams struct {
 
 // Server represents the MCP server with Scrapbox tools
 type Server struct {
-	client *scrapbox.Client
-	server *mcp.Server
+	client    *scrapbox.Client
+	mcpServer *mcp.Server
 }
 
 // NewServer creates a new MCP server with Scrapbox tools
@@ -43,8 +43,8 @@ func NewServer(client *scrapbox.Client) *Server {
 	server := mcp.NewServer("Scrapbox MCP Server", "1.0.0", nil)
 
 	s := &Server{
-		client: client,
-		server: server,
+		client:    client,
+		mcpServer: server,
 	}
 
 	// Register tools
@@ -55,13 +55,13 @@ func NewServer(client *scrapbox.Client) *Server {
 
 // GetServer returns the underlying MCP server for transport configuration
 func (s *Server) GetServer() *mcp.Server {
-	return s.server
+	return s.mcpServer
 }
 
 // registerTools registers all Scrapbox tools with the MCP server
 func (s *Server) registerTools() {
 	// Register get_page tool
-	s.server.AddTools(
+	s.mcpServer.AddTools(
 		mcp.NewServerTool("get_page", "Get a Scrapbox page by title", s.handleGetPage,
 			mcp.Input(
 				mcp.Property("page_title", mcp.Description("Page title to retrieve")),
